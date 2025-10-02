@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Static export is only needed for Capacitor Android build, not web deployment
   eslint: {
     ignoreDuringBuilds: true,
   },
