@@ -162,8 +162,16 @@ export async function getChatMessages(chatId: string, limit = 50): Promise<Messa
 // Mark messages as read
 export async function markMessagesAsRead(chatId: string, username: string): Promise<void> {
   try {
+    console.log("[v0] markMessagesAsRead - chatId:", chatId, "username:", username)
+
+    const unreadBefore = await redis.hget(`user:${username}:unread`, chatId)
+    console.log("[v0] markMessagesAsRead - unread count before:", unreadBefore)
+
     // Reset unread counter for this chat
     await redis.hdel(`user:${username}:unread`, chatId)
+
+    const unreadAfter = await redis.hget(`user:${username}:unread`, chatId)
+    console.log("[v0] markMessagesAsRead - unread count after:", unreadAfter)
   } catch (error) {
     console.error("[v0] markMessagesAsRead error:", error)
   }

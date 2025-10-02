@@ -100,6 +100,9 @@ export function ChatWindow({ username, otherUser, onBack }: ChatWindowProps) {
             lastCheckTimestamp.current = msg.timestamp
           }
         })
+
+        console.log("[v0] Marking messages as read for chat with:", otherUser)
+        await markAsRead()
       } else {
         console.error("[v0] Load history failed with status:", response.status)
         setMessages([])
@@ -159,8 +162,9 @@ export function ChatWindow({ username, otherUser, onBack }: ChatWindowProps) {
 
   const markAsRead = async () => {
     try {
+      console.log("[v0] markAsRead - calling API for otherUser:", otherUser)
       const token = localStorage.getItem("auth-token")
-      await fetch("/api/mark-read", {
+      const response = await fetch("/api/mark-read", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -168,6 +172,12 @@ export function ChatWindow({ username, otherUser, onBack }: ChatWindowProps) {
         },
         body: JSON.stringify({ otherUser }),
       })
+
+      if (response.ok) {
+        console.log("[v0] markAsRead - successfully marked as read")
+      } else {
+        console.error("[v0] markAsRead - failed with status:", response.status)
+      }
     } catch (error) {
       console.error("[v0] Mark read error:", error)
     }

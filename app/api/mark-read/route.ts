@@ -25,8 +25,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Other user required" }, { status: 400 })
     }
 
+    console.log("[v0] mark-read API - username:", username, "otherUser:", otherUser)
+
     const chatId = getChatId(username, otherUser)
+    console.log("[v0] mark-read API - chatId:", chatId)
+
     await markMessagesAsRead(chatId, username)
+    console.log("[v0] mark-read API - successfully marked as read")
 
     return NextResponse.json({ success: true })
   } catch (error) {
