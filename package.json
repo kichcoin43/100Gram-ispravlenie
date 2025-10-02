@@ -9,6 +9,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@capacitor/cli": "latest",
+    "@capacitor/core": "latest",
+    "@capacitor/local-notifications": "latest",
+    "@capacitor/push-notifications": "latest",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
@@ -40,6 +44,7 @@
     "@upstash/redis": "latest",
     "@vercel/analytics": "latest",
     "@vercel/blob": "latest",
+    "@vercel/kv": "latest",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "latest",
     "class-variance-authority": "^0.7.1",

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">100GRAM</string>
+    <string name="title_activity_main">100GRAM</string>
+    <string name="package_name">com.telegram.messenger</string>
+    <string name="custom_url_scheme">com.telegram.messenger</string>
+</resources>

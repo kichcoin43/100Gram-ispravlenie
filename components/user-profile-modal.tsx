@@ -18,6 +18,7 @@ interface UserProfile {
   bio?: string
   photoUrl?: string
   createdAt: number
+  emoji?: string
 }
 
 export function UserProfileModal({ isOpen, onClose, username, onStartChat }: UserProfileModalProps) {
@@ -69,10 +70,19 @@ export function UserProfileModal({ isOpen, onClose, username, onStartChat }: Use
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <h3 className="text-xl font-semibold">{profile.displayName || profile.username}</h3>
             {profile.username === "KICH" && (
-              <Image src="/verified-badge.png" alt="Verified" width={24} height={24} className="flex-shrink-0" />
+              <Image src="/verified-badge.png" alt="Verified" width={16} height={16} className="flex-shrink-0" />
+            )}
+            {profile.emoji && (
+              <Image
+                src={`/emoji/${profile.emoji}.${profile.emoji === "drink" || profile.emoji === "party" || profile.emoji === "king" ? "jpeg" : "png"}`}
+                alt="Emoji"
+                width={28}
+                height={28}
+                className="flex-shrink-0"
+              />
             )}
           </div>
           <p className="text-sm text-gray-500">@{profile.username}</p>

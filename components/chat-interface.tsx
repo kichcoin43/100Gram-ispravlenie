@@ -5,6 +5,7 @@ import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useNotifications } from "@/hooks/use-notifications"
 
 interface Message {
   id: string
@@ -26,6 +27,7 @@ export function ChatInterface({ username, onLogout }: ChatInterfaceProps) {
   const [isLoading, setIsLoading] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const eventSourceRef = useRef<EventSource | null>(null)
+  const { showNotification } = useNotifications()
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem("auth-token")
@@ -88,6 +90,9 @@ export function ChatInterface({ username, onLogout }: ChatInterfaceProps) {
           if (prev.some((m) => m.id === messageData.id)) {
             return prev
           }
+          if (messageData.username !== username) {
+            showNotification(messageData.username, messageData.message)
+          }
           return [...prev, messageData]
         })
       } catch (error) {
@@ -120,7 +125,7 @@ export function ChatInterface({ username, onLogout }: ChatInterfaceProps) {
       console.log("[v0] Closing SSE connection")
       eventSource.close()
     }
-  }, [onLogout])
+  }, [onLogout, username, showNotification])
 
   // Auto-scroll to bottom
   useEffect(() => {

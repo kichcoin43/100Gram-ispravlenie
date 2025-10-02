@@ -18,6 +18,7 @@ interface Chat {
   displayName?: string
   photoUrl?: string
   folderId?: string | null
+  emoji?: string
 }
 
 interface Folder {
@@ -77,6 +78,7 @@ export function ChatList({ username, onSelectChat, onLogout, onUnreadCountChange
                   ...chat,
                   displayName: profile.displayName,
                   photoUrl: profile.photoUrl,
+                  emoji: profile.emoji,
                 }
               }
             } catch (error) {
@@ -291,7 +293,7 @@ export function ChatList({ username, onSelectChat, onLogout, onUnreadCountChange
                   </Avatar>
                   <div className="flex min-w-0 flex-1 flex-col items-start gap-0.5">
                     <div className="flex w-full items-baseline justify-between gap-2">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <h3 className="truncate text-[15px] font-semibold text-gray-900">
                           {chat.displayName || chat.otherUser}
                         </h3>
@@ -299,8 +301,17 @@ export function ChatList({ username, onSelectChat, onLogout, onUnreadCountChange
                           <Image
                             src="/verified-badge.png"
                             alt="Verified"
-                            width={20}
-                            height={20}
+                            width={16}
+                            height={16}
+                            className="flex-shrink-0"
+                          />
+                        )}
+                        {chat.emoji && (
+                          <Image
+                            src={`/emoji/${chat.emoji}.${chat.emoji === "drink" || chat.emoji === "party" || chat.emoji === "king" ? "jpeg" : "png"}`}
+                            alt="Emoji"
+                            width={24}
+                            height={24}
                             className="flex-shrink-0"
                           />
                         )}

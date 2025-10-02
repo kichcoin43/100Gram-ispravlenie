@@ -12,6 +12,7 @@ export interface User {
   displayName?: string
   bio?: string
   photoUrl?: string
+  emoji?: string // Added emoji field for user profile badges
 }
 
 export interface Chat {
@@ -208,7 +209,7 @@ export async function searchUsers(query: string): Promise<string[]> {
 
 export async function updateUserProfile(
   username: string,
-  updates: { displayName?: string; bio?: string; photoUrl?: string },
+  updates: { displayName?: string; bio?: string; photoUrl?: string; emoji?: string },
 ): Promise<User | null> {
   console.log("[v0] updateUserProfile - username:", username, "updates:", updates)
 

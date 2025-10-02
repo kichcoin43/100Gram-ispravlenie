@@ -18,3 +18,18 @@ export async function verifyToken(token: string): Promise<{ username: string } |
     return null
   }
 }
+
+export async function verifyAuth(request: Request): Promise<{ username: string } | null> {
+  try {
+    const authHeader = request.headers.get("Authorization")
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return null
+    }
+
+    const token = authHeader.substring(7)
+    return await verifyToken(token)
+  } catch (error) {
+    console.error("[v0] Auth verification failed:", error)
+    return null
+  }
+}

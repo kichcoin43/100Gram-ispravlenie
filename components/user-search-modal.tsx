@@ -18,6 +18,7 @@ interface UserProfile {
   username: string
   displayName?: string
   photoUrl?: string
+  emoji?: string
 }
 
 export function UserSearchModal({ isOpen, onClose, onSelectUser }: UserSearchModalProps) {
@@ -59,6 +60,7 @@ export function UserSearchModal({ isOpen, onClose, onSelectUser }: UserSearchMod
                   username,
                   displayName: profile.displayName,
                   photoUrl: profile.photoUrl,
+                  emoji: profile.emoji,
                 }
               }
             } catch (error) {
@@ -148,14 +150,23 @@ export function UserSearchModal({ isOpen, onClose, onSelectUser }: UserSearchMod
                       {(user.displayName || user.username)[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
                     <span className="font-medium text-gray-900">{user.displayName || user.username}</span>
                     {user.username === "KICH" && (
                       <Image
                         src="/verified-badge.png"
                         alt="Verified"
-                        width={20}
-                        height={20}
+                        width={16}
+                        height={16}
+                        className="flex-shrink-0"
+                      />
+                    )}
+                    {user.emoji && (
+                      <Image
+                        src={`/emoji/${user.emoji}.${user.emoji === "drink" || user.emoji === "party" || user.emoji === "king" ? "jpeg" : "png"}`}
+                        alt="Emoji"
+                        width={24}
+                        height={24}
                         className="flex-shrink-0"
                       />
                     )}

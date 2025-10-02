@@ -22,6 +22,7 @@ interface UserProfile {
   username: string
   displayName?: string
   photoUrl?: string
+  emoji?: string
 }
 
 export function ChatWindow({ username, otherUser, onBack }: ChatWindowProps) {
@@ -301,10 +302,19 @@ export function ChatWindow({ username, otherUser, onBack }: ChatWindowProps) {
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-left">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <h2 className="font-semibold text-gray-900">{otherUserProfile?.displayName || otherUser}</h2>
               {otherUser === "KICH" && (
-                <Image src="/verified-badge.png" alt="Verified" width={20} height={20} className="flex-shrink-0" />
+                <Image src="/verified-badge.png" alt="Verified" width={16} height={16} className="flex-shrink-0" />
+              )}
+              {otherUserProfile?.emoji && (
+                <Image
+                  src={`/emoji/${otherUserProfile.emoji}.${otherUserProfile.emoji === "drink" || otherUserProfile.emoji === "party" || otherUserProfile.emoji === "king" ? "jpeg" : "png"}`}
+                  alt="Emoji"
+                  width={24}
+                  height={24}
+                  className="flex-shrink-0"
+                />
               )}
             </div>
             <p className="text-xs text-gray-500">{isConnected ? "онлайн" : "подключение..."}</p>

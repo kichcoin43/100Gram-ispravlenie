@@ -3,11 +3,12 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { X, Camera, Save, Edit2 } from "lucide-react"
+import { X, Camera, Save, Edit2, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 interface ProfileModalProps {
   isOpen: boolean
@@ -21,18 +22,31 @@ interface UserProfile {
   displayName?: string
   bio?: string
   photoUrl?: string
+  emoji?: string
 }
+
+const EMOJI_OPTIONS = [
+  { id: "cool", name: "Крутой", image: "/emoji/cool.png" },
+  { id: "buy", name: "Предприниматель", image: "/emoji/buy.png" },
+  { id: "verified-coin", name: "Монета", image: "/emoji/verified-coin.png" },
+  { id: "treasure", name: "Сокровище", image: "/emoji/treasure.png" },
+  { id: "coin-3d", name: "3D Монета", image: "/emoji/coin-3d.png" },
+  { id: "spin", name: "Спин", image: "/emoji/spin.png" },
+  { id: "nerd", name: "Умник", image: "/emoji/nerd.png" },
+]
 
 export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: ProfileModalProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [displayName, setDisplayName] = useState("")
   const [bio, setBio] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
+  const [emoji, setEmoji] = useState<string>("")
   const [isUploading, setIsUploading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isEmojiPopoverOpen, setIsEmojiPopoverOpen] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
@@ -59,6 +73,7 @@ export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: Pro
         setDisplayName(data.displayName || data.username)
         setBio(data.bio || "")
         setPhotoUrl(data.photoUrl || "")
+        setEmoji(data.emoji || "")
       } else {
         const errorData = await res.json().catch(() => ({}))
         console.error("[v0] ProfileModal - API error:", errorData)
@@ -134,7 +149,7 @@ export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: Pro
   const handleSave = async () => {
     setIsSaving(true)
     try {
-      console.log("[v0] ProfileModal - saving profile:", { displayName, bio, photoUrl })
+      console.log("[v0] ProfileModal - saving profile:", { displayName, bio, photoUrl, emoji })
       const token = localStorage.getItem("auth-token")
       if (!token) {
         console.error("[v0] No auth token found in localStorage")
@@ -151,6 +166,7 @@ export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: Pro
           displayName,
           bio,
           photoUrl,
+          emoji,
         }),
       })
 
@@ -206,10 +222,19 @@ export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: Pro
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <h3 className="text-xl font-semibold">{displayName || username}</h3>
                 {username === "KICH" && (
-                  <Image src="/verified-badge.png" alt="Verified" width={20} height={20} className="flex-shrink-0" />
+                  <Image src="/verified-badge.png" alt="Verified" width={16} height={16} className="flex-shrink-0" />
+                )}
+                {emoji && (
+                  <Image
+                    src={EMOJI_OPTIONS.find((e) => e.id === emoji)?.image || ""}
+                    alt="Emoji"
+                    width={28}
+                    height={28}
+                    className="flex-shrink-0"
+                  />
                 )}
               </div>
               <p className="text-sm text-gray-500">@{username}</p>
@@ -267,12 +292,75 @@ export function ProfileModal({ isOpen, onClose, username, onProfileUpdate }: Pro
             <div className="space-y-4">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">Имя</label>
-                <Input
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Ваше имя"
-                  maxLength={50}
-                />
+                <div className="flex items-center gap-2">
+                  <Input
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="Ваше имя"
+                    maxLength={50}
+                    className="flex-1"
+                  />
+                  <Popover open={isEmojiPopoverOpen} onOpenChange={setIsEmojiPopoverOpen}>
+                    <PopoverTrigger asChild>
+                      <button
+                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-white hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                        title="Выбрать эмодзи"
+                      >
+                        {emoji ? (
+                          <Image
+                            src={EMOJI_OPTIONS.find((e) => e.id === emoji)?.image || ""}
+                            alt="Emoji"
+                            width={24}
+                            height={24}
+                            className="object-contain rounded-full"
+                          />
+                        ) : (
+                          <Plus className="h-5 w-5 text-gray-400" />
+                        )}
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-64 p-3" align="end">
+                      <div className="mb-2 text-sm font-medium text-gray-700">Выберите эмодзи</div>
+                      <div className="grid grid-cols-4 gap-2">
+                        <button
+                          onClick={() => {
+                            setEmoji("")
+                            setIsEmojiPopoverOpen(false)
+                          }}
+                          className={`flex h-12 w-12 items-center justify-center rounded-lg border-2 transition-all ${
+                            emoji === "" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                          }`}
+                          title="Без эмодзи"
+                        >
+                          <X className="h-4 w-4 text-gray-400" />
+                        </button>
+                        {EMOJI_OPTIONS.map((option) => (
+                          <button
+                            key={option.id}
+                            onClick={() => {
+                              setEmoji(option.id)
+                              setIsEmojiPopoverOpen(false)
+                            }}
+                            className={`flex h-12 w-12 items-center justify-center rounded-lg border-2 transition-all bg-white ${
+                              emoji === option.id
+                                ? "border-blue-500 bg-blue-50"
+                                : "border-gray-200 hover:border-gray-300"
+                            }`}
+                            title={option.name}
+                          >
+                            <Image
+                              src={option.image || "/placeholder.svg"}
+                              alt={option.name}
+                              width={32}
+                              height={32}
+                              className="object-contain"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
 
               <div>

@@ -61,12 +61,13 @@ export async function PUT(request: NextRequest) {
     const body = await request.json()
     console.log("[v0] Profile PUT - update data:", body)
 
-    const { displayName, bio, photoUrl } = body
+    const { displayName, bio, photoUrl, emoji } = body
 
     const updatedUser = await updateUserProfile(payload.username, {
       displayName,
       bio,
       photoUrl,
+      emoji,
     })
     console.log("[v0] Profile PUT - updated user:", updatedUser)
 
