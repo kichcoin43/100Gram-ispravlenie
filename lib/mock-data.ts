@@ -1,0 +1,68 @@
+import type { Message } from "./redis"
+
+export const mockMessages: Message[] = [
+  {
+    id: "1",
+    chatId: "alice:bob",
+    author: "alice",
+    text: "Привет! Как дела?",
+    timestamp: Date.now() - 3600000,
+    isRead: true,
+  },
+  {
+    id: "2",
+    chatId: "alice:bob",
+    author: "bob",
+    text: "Отлично! А у тебя?",
+    timestamp: Date.now() - 3500000,
+    isRead: true,
+  },
+  {
+    id: "3",
+    chatId: "alice:bob",
+    author: "alice",
+    text: "Тоже хорошо, спасибо 😊",
+    timestamp: Date.now() - 3400000,
+    isRead: true,
+  },
+  {
+    id: "4",
+    chatId: "alice:bob",
+    author: "bob",
+    text: "Что планируешь на выходные?",
+    timestamp: Date.now() - 3300000,
+    isRead: true,
+  },
+  {
+    id: "5",
+    chatId: "alice:bob",
+    author: "alice",
+    text: "Думаю сходить в кино. Хочешь присоединиться?",
+    timestamp: Date.now() - 3200000,
+    isRead: true,
+  },
+  {
+    id: "6",
+    chatId: "alice:bob",
+    author: "bob",
+    text: "Звучит здорово! Какой фильм?",
+    timestamp: Date.now() - 3100000,
+    isRead: true,
+  },
+  {
+    id: "7",
+    chatId: "alice:bob",
+    author: "alice",
+    text: "Новый фильм Marvel вышел",
+    timestamp: Date.now() - 3000000,
+    isRead: true,
+  },
+  {
+    id: "8",
+    chatId: "alice:bob",
+    author: "bob",
+    text: "Отлично! Я за 👍",
+    timestamp: Date.now() - 2900000,
+    isRead: true,
+  },
+]
